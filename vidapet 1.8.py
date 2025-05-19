@@ -25,8 +25,7 @@ def exibir_menu():
         print("7- Definir metas")
         print("8- Listar metas ")
         print("9- Sugerir cuidados")
-        print("10- Estatísticas dos pets") 
-        print("11- Sistema de pontos")
+        print("10- Sistema de pontos")
         print("0- Sair")
         opcao=int(input("Digite a opção que deseja realizar no menu: "))
         if opcao == 1:
@@ -38,7 +37,7 @@ def exibir_menu():
         elif opcao == 4:
             editar_pets()  
         elif opcao == 5:
-            eventos()      
+            cadastrar_eventos()      
         elif opcao == 6:
             listar_eventos()
         elif opcao == 7:
@@ -48,8 +47,6 @@ def exibir_menu():
         elif opcao == 9:
             cuidados() 
         elif opcao == 10:
-            estatísticas()   
-        elif opcao == 11:
             sistema_pontos() 
         else:
             sair()
@@ -186,9 +183,35 @@ def editar_pets():
     pausar()
 
 # Função para cadastrar eventos
-def eventos():
+def cadastrar_eventos():
     limpar_tela()
-    print("-----Eventos-----")
+    print("-----Cadastrar eventos-----")
+    pets = ler_dados("pets.txt")
+    if not pets:
+        print("Não há pets cadastrado. cadastre um primeiro")
+        pausar()
+        return
+    listar_pets()
+    try:
+        indice_pet = int(input("Digite o numero do pet para o evento: ")) -1
+        if 0 <= indice_pet <len(pets):
+            data = input("Data do evento (DD/MM/AAAA): ")
+            tipo_evento = input("Tipo de evento(Vacinaçao, consulta, rémedio): ")
+            observacoes = input("Observaçoes: ")
+
+            eventos = ler_dados("eventos.txt")
+            eventos.append([pets[indice_pet][0], data, tipo_evento, observacoes])
+            escreve_dados("eventos.txt", eventos)
+            print("Evento Cadastrado com sucesso!")
+        else:
+            print("Número do pet inválido")
+    except ValueError: 
+        print("Entrada inválda. Digite um numero.")  
+    pausar()     
+
+def listar_eventos():
+    limpar_tela()
+    print("----- listar Eventos-----")
     eventos = ler_dados("eventos.txt")
     if not eventos:
         print("Não há eventos cadastrados.")
@@ -196,6 +219,7 @@ def eventos():
         for evento in eventos:
             print(f"Pet: {evento[0]}, Data: {evento[1]}, Tipo: {evento[2]}, Obs: {evento[3]}")  
     pausar()
+
 
 #Função para criar novas metas
 def cria_metas(pets):
@@ -351,4 +375,3 @@ def sair():
     exit()
 
 exibir_menu()   
-
